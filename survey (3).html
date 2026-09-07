@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استبانة أولياء الأمور</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F1E7;
+    --paper-deep:#EFE7D6;
+    --ink:#26312E;
+    --teal:#1F5C54;
+    --teal-deep:#123B36;
+    --gold:#B8863B;
+    --rose:#9C4A3C;
+    --line:#D9CDB3;
+    --white:#FFFDF8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Tajawal',sans-serif;
+    line-height:1.7;
+  }
+  .wrap{
+    max-width:720px;
+    margin:0 auto;
+    padding:28px 20px 110px;
+  }
+
+  /* school header */
+  .school-bar{
+    max-width:720px;
+    margin:0 auto;
+    padding:16px 20px 0;
+    text-align:right;
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--teal-deep);
+    letter-spacing:.3px;
+  }
+
+  /* email field */
+  .email-field{
+    max-width:720px;
+    margin:0 auto 20px;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:16px 18px;
+  }
+  .email-field label{
+    display:block;
+    font-size:14px;
+    font-weight:500;
+    margin-bottom:8px;
+    color:var(--ink);
+  }
+  .email-field input{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:11px 14px;
+    font-family:'Tajawal',sans-serif;
+    font-size:15px;
+    color:var(--ink);
+    background:var(--white);
+    direction:ltr;
+    text-align:right;
+  }
+  .email-field input:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+  .email-field.missing input{ border-color:var(--rose); }
+  .email-field.missing label::after{
+    content:" *";
+    color:var(--rose);
+  }
+
+  /* header */
+  .masthead{
+    text-align:center;
+    padding:34px 10px 26px;
+    border-bottom:3px double var(--gold);
+    margin-bottom:26px;
+  }
+  .masthead .eyebrow{
+    font-family:'Amiri', serif;
+    font-size:15px;
+    color:var(--gold);
+    margin:0 0 6px;
+  }
+  .masthead h1{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size:clamp(24px,5vw,32px);
+    color:var(--teal-deep);
+    margin:0 0 14px;
+  }
+  .masthead p{
+    font-size:15px;
+    color:#4B564F;
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  /* progress */
+  .progress{
+    display:flex;
+    justify-content:space-between;
+    gap:6px;
+    margin-bottom:28px;
+  }
+  .progress .step{
+    flex:1;
+    text-align:center;
+  }
+  .progress .dot{
+    width:30px;height:30px;
+    border-radius:50%;
+    background:var(--white);
+    border:2px solid var(--line);
+    color:#8a8574;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 6px;
+    font-weight:700;
+    font-size:14px;
+    transition:all .25s ease;
+  }
+  .progress .step.active .dot{
+    background:var(--teal);
+    border-color:var(--teal);
+    color:var(--white);
+  }
+  .progress .step.done .dot{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:var(--white);
+  }
+  .progress .label{
+    font-size:12px;
+    color:#6b7268;
+  }
+
+  /* panels */
+  .panel{
+    display:none;
+  }
+  .panel.active{
+    display:block;
+    animation:fade .35s ease;
+  }
+  @keyframes fade{
+    from{opacity:0; transform:translateY(6px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .panel-title{
+    font-family:'Amiri', serif;
+    font-size:22px;
+    color:var(--teal-deep);
+    border-right:4px solid var(--gold);
+    padding-right:14px;
+    margin:0 0 6px;
+  }
+  .panel-hint{
+    font-size:13px;
+    color:#6b7268;
+    margin:0 0 22px;
+    padding-right:18px;
+  }
+
+  .q-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:18px 18px 16px;
+    margin-bottom:14px;
+  }
+  .q-text{
+    font-size:15.5px;
+    font-weight:500;
+    margin:0 0 16px;
+  }
+  .scale{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:6px;
+  }
+  .scale .end-label{
+    font-size:11px;
+    color:#8a8574;
+    width:64px;
+    flex-shrink:0;
+  }
+  .scale .end-label.left{ text-align:left; }
+  .scale .end-label.right{ text-align:right; }
+  .scale-opts{
+    display:flex;
+    gap:8px;
+    flex:1;
+    justify-content:center;
+  }
+  .scale-opts label{
+    position:relative;
+  }
+  .scale-opts input{
+    position:absolute;
+    opacity:0;
+    width:100%;height:100%;
+    cursor:pointer;
+    margin:0;
+  }
+  .scale-opts .circle{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;
+    color:#8a8574;
+    background:var(--white);
+    transition:all .15s ease;
+  }
+  .scale-opts input:checked + .circle{
+    background:var(--teal);
+    border-color:var(--teal);
+    color:var(--white);
+    transform:scale(1.08);
+  }
+  .scale-opts input:focus-visible + .circle{
+    outline:2px solid var(--rose);
+    outline-offset:2px;
+  }
+  .q-card.missing{
+    border-color:var(--rose);
+  }
+  .q-card.missing .q-text::after{
+    content:" *";
+    color:var(--rose);
+  }
+
+  textarea{
+    width:100%;
+    min-height:120px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:14px;
+    font-family:'Tajawal',sans-serif;
+    font-size:15px;
+    color:var(--ink);
+    background:var(--white);
+    resize:vertical;
+  }
+  textarea:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    max-width:720px;
+    margin:0 auto;
+    background:var(--paper);
+    border-top:2px solid var(--gold);
+    padding:14px 20px;
+    box-shadow:0 -6px 16px rgba(0,0,0,.06);
+    z-index:50;
+  }
+  button{
+    font-family:'Tajawal',sans-serif;
+    font-size:15px;
+    font-weight:700;
+    border-radius:4px;
+    padding:13px 26px;
+    cursor:pointer;
+    border:2px solid var(--teal);
+    background:var(--teal);
+    color:var(--white);
+    transition:opacity .15s ease;
+  }
+  button.secondary{
+    background:transparent;
+    color:var(--teal);
+  }
+  button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+  }
+  button:hover:not(:disabled){ opacity:.9; }
+  .spacer{ flex:1; }
+
+  .note{
+    font-size:12.5px;
+    color:#8a8574;
+    text-align:center;
+    margin-top:18px;
+  }
+
+  /* thank you */
+  #thanks{
+    display:none;
+    text-align:center;
+    padding:60px 20px;
+  }
+  #thanks.active{ display:block; }
+  #thanks .mark{
+    width:64px;height:64px;
+    border-radius:50%;
+    background:var(--teal);
+    color:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 20px;
+    font-size:30px;
+  }
+  #thanks h2{
+    font-family:'Amiri', serif;
+    color:var(--teal-deep);
+    margin:0 0 10px;
+  }
+  #thanks p{ color:#4B564F; }
+
+  #errorBanner{
+    display:none;
+    background:#fbeceA;
+    border:1px solid var(--rose);
+    color:var(--rose);
+    padding:12px 16px;
+    border-radius:4px;
+    font-size:13.5px;
+    margin-bottom:16px;
+    text-align:center;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .panel.active{ animation:none; }
+  }
+
+  @media (max-width:400px){
+    .nav-row{ padding:10px 14px; }
+    .nav-row button{ padding:12px 16px; font-size:14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="school-bar">مدرسة حنينا الأساسية المختلطة</div>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <p class="eyebrow">﷽</p>
+    <h1>استبانة أولياء الأمور حول التدخلات العلاجية<br>في الرياضيات واللغة العربية</h1>
+    <p>عزيزي ولي الأمر، تهدف هذه الاستبانة إلى التعرف إلى آرائكم حول التدخلات العلاجية المقدمة لأبنائكم، ومدى إسهامها في تحسين مستواهم الأكاديمي. لكل عبارة اختر الإجابة التي تعبر عن رأيك بدقة، من 1 (أعارض بشدة) إلى 5 (أوافق بشدة).</p>
+  </div>
+
+  <div id="formArea">
+    <div class="email-field" id="emailField">
+      <label for="parentEmail">بريدكم الإلكتروني</label>
+      <input type="email" id="parentEmail" placeholder="example@email.com" required>
+    </div>
+
+    <div class="progress" id="progressBar"></div>
+    <div id="errorBanner">فضلاً أجب عن جميع العبارات المميزة قبل المتابعة.</div>
+    <form id="surveyForm"></form>
+  </div>
+
+  <div id="thanks">
+    <div class="mark">✓</div>
+    <h2>شكرًا لمشاركتكم</h2>
+    <p>تم تسجيل إجاباتكم، وفُتح تطبيق البريد لديكم مع الإجابات جاهزة — فضلاً اضغطوا "إرسال" هناك لإتمام إرسالها إلى المدرسة.</p>
+  </div>
+
+</div>
+
+<script>
+const scaleLabels = ['أعارض بشدة', 'أوافق بشدة'];
+
+const sections = [
+  {
+    key:'math',
+    title:'أولًا: التدخلات العلاجية في الرياضيات',
+    hint:'عبّر عن رأيك في كل عبارة تتعلق بمادة الرياضيات.',
+    questions:[
+      'يتم اكتشاف جوانب الضعف لدى ابني/ابنتي في مادة الرياضيات بصورة مبكرة.',
+      'يتم إبلاغي عند وجود ضعف في مستوى ابني/ابنتي في الرياضيات.',
+      'تقدم المدرسة أنشطة علاجية مناسبة لمستوى ابني/ابنتي في الرياضيات.',
+      'يحصل ابني/ابنتي على تدريبات إضافية لمعالجة جوانب الضعف في الرياضيات.',
+      'تستخدم المدرسة طرقًا متنوعة في علاج صعوبات تعلم الرياضيات.',
+      'يتم التركيز على المهارات الأساسية في الرياضيات التي يواجه ابني/ابنتي ضعفًا فيها.',
+      'يتم متابعة تقدم ابني/ابنتي في الرياضيات بعد تقديم التدخل العلاجي.',
+      'يتم تعديل التدخل العلاجي في الرياضيات عند عدم تحقيق التحسن المطلوب.',
+      'ساهم التدخل العلاجي في تحسين أداء ابني/ابنتي في الرياضيات.',
+      'لاحظت زيادة ثقة ابني/ابنتي بقدرته على حل المسائل الرياضية بعد التدخل العلاجي.'
+    ]
+  },
+  {
+    key:'arabic',
+    title:'ثانيًا: التدخلات العلاجية في اللغة العربية',
+    hint:'عبّر عن رأيك في كل عبارة تتعلق بمادة اللغة العربية.',
+    questions:[
+      'يتم اكتشاف جوانب الضعف لدى ابني/ابنتي في مادة اللغة العربية بصورة مبكرة.',
+      'يتم إبلاغي عند وجود ضعف في مستوى ابني/ابنتي في اللغة العربية.',
+      'تقدم المدرسة أنشطة علاجية مناسبة لمستوى ابني/ابنتي في اللغة العربية.',
+      'يحصل ابني/ابنتي على تدريبات إضافية لمعالجة جوانب الضعف في اللغة العربية.',
+      'تستخدم المدرسة طرقًا متنوعة في علاج صعوبات تعلم اللغة العربية.',
+      'يتم التركيز على المهارات الأساسية في اللغة العربية التي يواجه ابني/ابنتي ضعفًا فيها.',
+      'يتم متابعة تقدم ابني/ابنتي في اللغة العربية بعد تقديم التدخل العلاجي.',
+      'يتم تعديل التدخل العلاجي في اللغة العربية عند عدم تحقيق التحسن المطلوب.',
+      'ساهم التدخل العلاجي في تحسين أداء ابني/ابنتي في اللغة العربية.',
+      'لاحظت زيادة ثقة ابني/ابنتي بقدرته على القراءة والكتابة بعد التدخل العلاجي.'
+    ]
+  }
+];
+
+const stepLabels = ['الرياضيات','اللغة العربية'];
+let current = 0;
+const answers = {}; // key: sectionKey-qIndex -> value (1-5), open -> text
+
+function buildProgress(){
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = '';
+  sections.forEach((s,i)=>{
+    const step = document.createElement('div');
+    step.className = 'step' + (i===current?' active':'') + (i<current?' done':'');
+    step.innerHTML = `<div class="dot">${i<current?'✓':i+1}</div><div class="label">${stepLabels[i]}</div>`;
+    bar.appendChild(step);
+  });
+}
+
+function buildForm(){
+  const form = document.getElementById('surveyForm');
+  form.innerHTML = '';
+
+  sections.forEach((section, sIdx)=>{
+    const panel = document.createElement('div');
+    panel.className = 'panel' + (sIdx===current ? ' active':'');
+    panel.dataset.index = sIdx;
+
+    const h = document.createElement('h2');
+    h.className = 'panel-title';
+    h.textContent = section.title;
+    panel.appendChild(h);
+
+    const hint = document.createElement('p');
+    hint.className = 'panel-hint';
+    hint.textContent = section.hint;
+    panel.appendChild(hint);
+
+    if(section.open){
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      const label = document.createElement('p');
+      label.className = 'q-text';
+      label.textContent = section.prompt;
+      card.appendChild(label);
+      const ta = document.createElement('textarea');
+      ta.id = 'open-answer';
+      ta.placeholder = 'اكتب مقترحاتك هنا (اختياري)...';
+      ta.value = answers['open'] || '';
+      ta.addEventListener('input', ()=>{ answers['open'] = ta.value; });
+      card.appendChild(ta);
+      panel.appendChild(card);
+    } else {
+      section.questions.forEach((q, qIdx)=>{
+        const key = section.key + '-' + qIdx;
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.dataset.key = key;
+
+        const label = document.createElement('p');
+        label.className = 'q-text';
+        label.textContent = q;
+        card.appendChild(label);
+
+        const scale = document.createElement('div');
+        scale.className = 'scale';
+
+        const leftLabel = document.createElement('span');
+        leftLabel.className = 'end-label right';
+        leftLabel.textContent = scaleLabels[1];
+        scale.appendChild(leftLabel);
+
+        const opts = document.createElement('div');
+        opts.className = 'scale-opts';
+        for(let v=5; v>=1; v--){
+          const lab = document.createElement('label');
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = key;
+          input.value = v;
+          if(answers[key] == v) input.checked = true;
+          input.addEventListener('change', ()=>{
+            answers[key] = v;
+            card.classList.remove('missing');
+            document.getElementById('errorBanner').style.display = 'none';
+          });
+          const circle = document.createElement('span');
+          circle.className = 'circle';
+          circle.textContent = v;
+          lab.appendChild(input);
+          lab.appendChild(circle);
+          opts.appendChild(lab);
+        }
+        scale.appendChild(opts);
+
+        const rightLabel = document.createElement('span');
+        rightLabel.className = 'end-label left';
+        rightLabel.textContent = scaleLabels[0];
+        scale.appendChild(rightLabel);
+
+        card.appendChild(scale);
+        panel.appendChild(card);
+      });
+    }
+
+    const nav = document.createElement('div');
+    nav.className = 'nav-row';
+
+    if(sIdx > 0){
+      const prev = document.createElement('button');
+      prev.type = 'button';
+      prev.className = 'secondary';
+      prev.textContent = 'السابق';
+      prev.addEventListener('click', ()=> goTo(sIdx-1));
+      nav.appendChild(prev);
+    } else {
+      const sp = document.createElement('span');
+      nav.appendChild(sp);
+    }
+
+    if(sIdx < sections.length - 1){
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.textContent = 'التالي';
+      next.addEventListener('click', ()=> attemptNext(sIdx));
+      nav.appendChild(next);
+    } else {
+      const submit = document.createElement('button');
+      submit.type = 'button';
+      submit.id = 'submitBtn';
+      submit.textContent = 'إرسال الاستبانة';
+      submit.addEventListener('click', submitSurvey);
+      nav.appendChild(submit);
+    }
+
+    form.appendChild(panel);
+  });
+}
+
+function attemptNext(sIdx){
+  const section = sections[sIdx];
+  let allAnswered = true;
+  if(!section.open){
+    section.questions.forEach((q, qIdx)=>{
+      const key = section.key + '-' + qIdx;
+      if(!answers[key]){
+        allAnswered = false;
+        const card = document.querySelector(`.q-card[data-key="${key}"]`);
+        if(card) card.classList.add('missing');
+      }
+    });
+  }
+  if(!allAnswered){
+    document.getElementById('errorBanner').style.display = 'block';
+    document.getElementById('errorBanner').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  goTo(sIdx+1);
+}
+
+function goTo(idx){
+  current = idx;
+  document.getElementById('errorBanner').style.display = 'none';
+  buildProgress();
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.classList.toggle('active', Number(p.dataset.index) === idx);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+const SCHOOL_EMAIL = 'tahaabdalbari5@gmail.com';
+const scoreLabels = {1:'أعارض بشدة', 2:'أعارض', 3:'محايد', 4:'أوافق', 5:'أوافق بشدة'};
+
+function isValidEmail(v){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+
+function buildEmailBody(parentEmail){
+  const lines = [];
+  lines.push('استبانة أولياء الأمور - مدرسة حنينا الأساسية المختلطة');
+  lines.push('بريد ولي الأمر: ' + parentEmail);
+  lines.push('تاريخ الإرسال: ' + new Date().toLocaleString('ar-EG'));
+  lines.push('');
+  sections.forEach(section=>{
+    lines.push('== ' + section.title + ' ==');
+    section.questions.forEach((q, qIdx)=>{
+      const key = section.key + '-' + qIdx;
+      const v = answers[key];
+      lines.push((qIdx+1) + '. ' + q + '  ->  ' + v + ' (' + scoreLabels[v] + ')');
+    });
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+
+async function submitSurvey(){
+  const emailInput = document.getElementById('parentEmail');
+  const emailField = document.getElementById('emailField');
+  const parentEmail = emailInput.value.trim();
+
+  if(!isValidEmail(parentEmail)){
+    emailField.classList.add('missing');
+    emailField.scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById('errorBanner').textContent = 'فضلاً أدخل بريدًا إلكترونيًا صحيحًا قبل الإرسال.';
+    document.getElementById('errorBanner').style.display = 'block';
+    return;
+  }
+  emailField.classList.remove('missing');
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'جارٍ الإرسال...';
+
+  const responseId = 'response:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+  const payload = {
+    submittedAt: new Date().toISOString(),
+    parentEmail: parentEmail,
+    answers: answers
+  };
+
+  try{
+    const result = await window.storage.set(responseId, JSON.stringify(payload), true);
+    if(!result){
+      throw new Error('Storage returned no result');
+    }
+
+    const subject = encodeURIComponent('استبانة أولياء الأمور - مدرسة حنينا الأساسية المختلطة');
+    const body = encodeURIComponent(buildEmailBody(parentEmail));
+    const mailtoLink = `mailto:${SCHOOL_EMAIL}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
+
+    document.getElementById('formArea').style.display = 'none';
+    document.getElementById('thanks').classList.add('active');
+  }catch(err){
+    console.error('فشل حفظ الإجابات:', err);
+    btn.disabled = false;
+    btn.textContent = 'إرسال الاستبانة';
+    document.getElementById('errorBanner').textContent = 'تعذّر إرسال الإجابات، فضلاً حاول مرة أخرى.';
+    document.getElementById('errorBanner').style.display = 'block';
+  }
+}
+
+buildProgress();
+buildForm();
+</script>
+</body>
+</html>
